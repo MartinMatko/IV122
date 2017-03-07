@@ -1,13 +1,8 @@
 from enum import Enum
-
 from PIL import Image, ImageDraw
-import math
-import matplotlib.pyplot as plot
-from random import randint
-from PIL.ImageQt import rgb
-from mpl_toolkits.mplot3d import Axes3D
+import random
 import numpy as np
-import scipy.misc.comb
+import time
 
 size = 255
 image = Image.new("RGB", (size, size), color="white")
@@ -41,37 +36,115 @@ def calculation(set, k, type):
 
 #print(calculation(set, 2, Type.combinationWithRepetition))
 
-def combNumber(n, k):
-    if k == 0 or k == n:
-        return 1
-    else:
-        return combNumber(n - 1, k - 1) + combNumber(n - 1, k)
-
-
-def comb_number(n, k, cache=None):
-    if k == 0 or k == n:
+def combNumber(n, k, cache=None):
+    if k == 0 or n == k:
         return 1
     if cache is None:
-        cache = [[0 for _ in range(k)] for _ in range(n)]
+        cache = np.zeros((k, n))
     if cache[n - 1][k - 1] == 0:
-        cache[n - 1][k - 1] = comb_number(n - 1, k - 1, cache) + comb_number(n - 1, k, cache)
+        cache[n - 1][k - 1] = combNumber(n - 1, k - 1, cache) + combNumber(n - 1, k, cache)
     return cache[n - 1][k - 1]
 
-
-def pascal(n, d):
-    sizeOfSquare = size / (n*2)
-    cache = [[0 for _ in range(n)] for _ in range(n)]
+def pascalTriangle(n, d):
+    sizeOfSquare = size / n
+    cache = [[0 for x in range(n)] for y in range(n)]
     colors = [[], [], []]
     for i in range(d):
-        colors[0].append(randint(0, 255))
-        colors[1].append(randint(0, 255))
-        colors[2].append(randint(0, 255))
+        colors[0].append(random.randint(0, 255))
+        colors[1].append(random.randint(0, 255))
+        colors[2].append(random.randint(0, 255))
     for y in range(0, n):
         for x in range(0, y + 1):
-            colorOfSquare = (colors[0][comb_number(y, x, cache) % d], colors[1][comb_number(y, x, cache) % d], colors[2][comb_number(y, x, cache) % d])
-            draw.rectangle([size/2 - x * sizeOfSquare, y * sizeOfSquare *2, size/2 - x * sizeOfSquare + sizeOfSquare, y * sizeOfSquare *2 + sizeOfSquare *2], colorOfSquare)
+            remainder = combNumber(y, x, cache) % d
+            colorOfSquare = (colors[0][remainder], colors[1][remainder], colors[2][remainder])
+            draw.rectangle([size/2 - x * sizeOfSquare + ((y - 1) * sizeOfSquare)/2, y * sizeOfSquare, size/2 - x * sizeOfSquare + \
+                            sizeOfSquare + ((y - 1) * sizeOfSquare)/2, y * sizeOfSquare + sizeOfSquare], colorOfSquare)
+    image.save("C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\images2\\pascal" + str(n) + "n" + str(d) + "d.png")
 
+#pascalTriangle(256, 8)
 
-pascal(30, 5)
+def exponentialWholeNumbers(x, n):
+    temp = 2
+    result = x
+    while temp*2 <= n:
+        result = result*result
+        temp *= 2
+    for i in range(int(n-temp/2)):
+        result = result * x
+    return result
 
-image.show()
+#exponentialWholeNumbers(2, 10)
+
+def rootBisectionMethod(x, n):
+    up = x
+    down = 0
+    difference = 1
+    half = (up - down) / 2
+    while (abs(difference) > 0.01):
+        half = (up - down)/2 + down
+        difference = exponentialWholeNumbers(half, n) - x
+        if (difference <= 0):
+            down = half
+        else:
+            up = half
+    return half
+
+def powerWithFractions(number, numerator, denominator):
+    result = exponentialWholeNumbers(number, numerator)
+    result = rootBisectionMethod(result, denominator)
+    print(result)
+
+#powerWithFractions(2, 2, 3)
+
+timeMax = 1
+
+def monteCarlo():
+    start = time.time()
+    inside = 0
+    total = 0
+    while time.time() - start < timeMax:
+        x = random.random()
+        y = random.random()
+        total +=1
+        if abs(np.sqrt(x**2 + y**2)) < 1:
+            inside += 1
+    print ((4 * inside) / total)
+
+def leibniz():
+    start = time.time()
+    result = 1
+    denominator = -3
+    counter = 1
+    while time.time() - start < timeMax:
+        result = result + (1/denominator)
+        if counter%2 == 1:
+            denominator = -1*denominator + 2
+        else:
+            denominator = -1*denominator - 2
+        counter += 1
+    print(result*4)
+
+def archimedes():
+    x = 4
+    y = 2 * np.math.sqrt(2)
+    start = time.time()
+    while time.time() - start < timeMax:
+        xnew = 2 * x * y / (x + y)
+        y = np.math.sqrt(xnew * y)
+        x = xnew
+    print((x + y) / 2)
+
+def wallis():
+    result = 2
+    i = 3
+    start = time.time()
+    while time.time() - start < timeMax:
+        result = result * ((i - 1) / i) * ((i + 1) / i)
+        i += 2
+    print(result*2)
+
+monteCarlo()
+leibniz()
+archimedes()
+wallis()
+#image.show()
