@@ -23,7 +23,7 @@ def scalar1():
     for (x, y) in [(0, 0), (1, 0), (0, 1), (1, 1)]:
         z = 1
         while z < size/2:
-            z = z ** (100/99)
+            z **= 100 / 99
             draw.line((z - 2*x*z + x*size, size/2, size/2, size/2 - z + 2*y*z), fill=10)
 
 def ulam():
