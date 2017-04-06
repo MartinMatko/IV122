@@ -30,12 +30,11 @@ def mandelbrot(zoom=((-2, 1), (-1.5, 1))):
                 # image.putpixel((i, j), (int(255 * abs(c) + 1), 0, 0))
             else:
                 # smooth = steps + 1 - (math.log(abs(zPrevious) + 1))/math.log(2)
-                # smooth = steps + 1 - (math.log(abs(z) + 1))/math.log(2)
                 # smooth = steps + 1 - math.log(abs(z) - abs(zPrevious) + 1)/math.log(2)
                 smooth = steps + 1 - math.log(math.log(abs(z) + 1)) / math.log(2)
                 image.putpixel((i, j), hsv2rgb(smooth / 30, 1, 1))
                 # image.putpixel((i, j), ((255 // 30 * steps), (255 // 30 * steps), (255 // 30 * steps)))
-    image.save("C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\images7\\mandelbrotColouredZZCCCC" + str(zoom) + ".png")
+    image.save("C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\images7\\mandelbrotColouredZZCCCC.png")
 
 
 def hsv2rgb(h, s, v):
