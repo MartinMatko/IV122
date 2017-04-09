@@ -75,13 +75,13 @@ def newton(zoom=((-2, 2), (-2, 2))):
             z = complex(realPart, imaginaryPart)
             z, steps = newtonMethod(z)
             if z:
-                flag = False
+                correspondingRootFound = False
                 for root in roots:
                     if abs(root - z) < 0.1:
                         z = root
-                        flag = True
+                        correspondingRootFound = True
                         break
-                if not flag:
+                if not correspondingRootFound:
                     roots.append(z)
                 image.putpixel((i, j), (steps, steps, steps))
                 #image.putpixel((i, j), colors[roots.index(z)])

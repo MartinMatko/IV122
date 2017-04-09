@@ -1,10 +1,5 @@
-from PIL import Image, ImageDraw
 import math
-
-size = 255
-image = Image.new("RGB", (size, size), color="white")
-draw = ImageDraw.Draw(image)
-middle = size // 2
+from PIL import ImageDraw
 
 
 class Point:
@@ -24,12 +19,17 @@ class Line:
         self.p2 = p2
         self.isPenDown = isPenDown
 
-    def is_point_on_line(self, point):
-        if (min(self.p1.x, self.p2.x) <= point.x <= max(self.p1.x, self.p2.x)
-            and min(self.p1.y, self.p2.y) <= point.y <= max(self.p1.y, self.p2.y)):
+    def isPointOnLine(self, point):
+        if (min(self.p1.x, self.p2.x) < point.x < max(self.p1.x, self.p2.x)
+            and min(self.p1.y, self.p2.y) < point.y < max(self.p1.y, self.p2.y)):
             return True
         else:
             return False
+
+    def length(self):
+        a = self.p2.x - self.p1.x
+        b = self.p2.y - self.p1.y
+        return math.sqrt(a ** 2 + b ** 2)
 
     def intersect(self, l):
         def line(p1, p2):
@@ -49,10 +49,10 @@ class Line:
             x = Dx / D
             y = Dy / D
             p = Point(x, y)
-            return self.is_point_on_line(p) and l.is_point_on_line(
-                p)  # musim overit, lebo ma zaujimaju usecky a nie priamky
-
-        return False
+            # musim overit, lebo ma zaujimaju usecky a nie priamky
+            if self.isPointOnLine(p) and l.isPointOnLine(p):
+                return p
+        return None
 
     def drawLine(self, image, size):
         draw = ImageDraw.Draw(image)

@@ -22,7 +22,7 @@ def spiral():
     image.save("C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\images4\\spiral.png")
 
 
-def circle_full(r):
+def circleFull(r):
     for x in range(size):
         for y in range(size):
             if (x - size / 2) ** 2 + (y - size / 2) ** 2 < r ** 2:
@@ -30,7 +30,7 @@ def circle_full(r):
     image.save("C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\images4\\circle_full.png")
 
 
-def circle_with_width(r):
+def circleWithWidth(r):
     for x in range(size):
         for y in range(size):
             epsilon = size / 100
@@ -82,7 +82,7 @@ def polygon(points):
             control_line = Line(Point(0, y), Point(x, y))
             counter = 0
             for line in lines:
-                if control_line.intersect(line):
+                if control_line.intersect(line) is not None:
                     counter += 1
             if counter % 2 != 0:
                 image.putpixel((x, y), (0, 0, 0))
@@ -91,7 +91,7 @@ def polygon(points):
     im.save("C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\images4\\polygon.png")
 
 
-def circle_ilusion():
+def circleIlusion():
     for x in range(size):
         for y in range(size):
             for z in range(1, size, int(size / 30)):
@@ -137,33 +137,33 @@ def lines():
     size_of_square = 22
     for line in range(rows):
         x = (line % 2) * size_of_square // 2;
-        draw_row(x, y, rows // 2, size_of_square, im)
+        drawRow(x, y, rows // 2, size_of_square, im)
         y = y + size_of_square + 2
     im.show()
     im.save("C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\images4\\lines.png")
 
 
-def draw_row(x, y, pairs, size_of_square, image):
+def drawRow(x, y, pairs, size_of_square, image):
     white = (255, 255, 255)
     black = (0, 0, 0)
     for i in range(pairs):
-        draw_square(x, y, size_of_square, black, image)
-        draw_square(x + size_of_square, y, size_of_square, white, image)
+        drawSquare(x, y, size_of_square, black, image)
+        drawSquare(x + size_of_square, y, size_of_square, white, image)
         x += size_of_square * 2
 
 
-def draw_square(x, y, size, color, image):
+def drawSquare(x, y, size, color, image):
     for i in range(size):
         for j in range(size):
             image.putpixel((x + i, y + j), color)
 
 
 # spiral()
-# circle_full(80)
-# circle_with_width(80)
+# circleFull(80)
+# circleWithWidth(80)
 # ellipse(100, 50, math.pi/4)
 # polygon([[10, 10], [180, 20], [160, 150], [100, 50], [20, 180]])
-# circle_ilusion()
+# circleIlusion()
 # lines()
 chessboard(6, 10)
 image.show()
