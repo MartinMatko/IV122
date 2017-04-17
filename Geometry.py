@@ -1,5 +1,7 @@
 import math
 from PIL import ImageDraw
+import numpy as np
+import copy
 
 
 class Point:
@@ -57,3 +59,38 @@ class Line:
     def drawLine(self, image, size):
         draw = ImageDraw.Draw(image)
         draw.line((size // 2 + self.p1.x, size // 2 - self.p1.y, size // 2 + self.p2.x, size // 2 - self.p2.y), fill=10)
+
+
+class Polygon():
+    def __init__(self, points):
+        self.points = points
+
+    def applyTransformation(self, transformation):
+        oldPoints = copy.deepcopy(self.points)
+        self.points = []
+        for point in oldPoints:
+            result = np.dot(transformation, [point.x, point.y, 1])
+            self.points.append(Point(result[0, 0], result[0, 1]))
+        return self
+
+    def repeatTransformation(self, n, transformation, image, size):
+        for i in range(n):
+            self.draw(image, size)
+            self.applyTransformation(transformation)
+
+    def draw(self, image, size):
+        for i in range(len(self.points) - 1):
+            line = Line(self.points[i], self.points[i + 1])
+            line.drawLine(image, size)
+
+
+class PolygonGroup:
+    def __init__(self, polygons=None):
+        self.polygons = []
+        if polygons is not None:
+            self.polygons.extend(polygons)
+
+    def applyTransformation(self, transformation):
+        for polygon in self.polygons:
+            polygon.applyTransformation(transformation)
+        return self
