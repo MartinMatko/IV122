@@ -3,7 +3,7 @@ import math
 import numpy as np
 import copy
 
-from Geometry import Polygon, Point, PolygonGroup
+from Geometry import Polygon, Point, PolygonGroup, Line
 
 size = 1000
 image = Image.new("RGB", (size, size), color="white")
@@ -48,9 +48,9 @@ def combine(transformations):
 
 
 def square(size):
-    square = Polygon(
+    square1 = Polygon(
         [Point(-size, size), Point(size, size), Point(size, -size), Point(-size, -size), Point(-size, size)])
-    return square.applyTransformation(rotation(90))
+    return square1
 
 
 def squares():
@@ -77,23 +77,25 @@ def fan():
 def mergeGroups(groups):
     merged = PolygonGroup()
     for group in groups:
-        for polygon in group.polygons:
-            merged.polygons.append(polygon)
+        merged.polygons.extend(group.polygons)
     return merged
 
 
 def mrcm(n, polygon, transformations):
-    group = PolygonGroup([polygon])
+    parents = PolygonGroup([polygon])
     for i in range(n):
-        groups = []
+        children = []
         for transformation in transformations:
-            oldPolygons = copy.deepcopy(group.polygons)
-            newGroup = PolygonGroup(oldPolygons)
+            newGroup = copy.deepcopy(parents)
             newGroup.applyTransformation(transformation)
-            groups.append(newGroup)
-        group = mergeGroups(groups)
-    for polygon in group.polygons:
-        polygon.draw(image, size)
+            children.append(newGroup)
+        parents = mergeGroups(children)
+    for i in range(0, len(parents.polygons)):
+        # nutne preskalovanie pre transformacie zadane maticou
+        # parents.polygons[i].applyTransformation(scaling(size, size))
+        # parents.polygons[i].applyTransformation(translation(-size // 2, -size // 2))
+        parents.polygons[i].draw(image, size)
+    return parents
 
 
 def sierpinskyTriangle(size, angle):
@@ -104,7 +106,7 @@ def sierpinskyTriangle(size, angle):
     image.save("C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\images8\\sierpinskyTriangle" + str(angle) + ".png")
 
 
-def star(size):
+def star():
     transformations = [np.matrix([[0.255, 0.0, 0.3726],
                                   [0.0, 0.255, 0.6714],
                                   [0, 0, 1]]),
@@ -117,8 +119,44 @@ def star(size):
                        np.matrix([[0.370, -0.642, 0.6356],
                                   [0.642, 0.370, -0.0061],
                                   [0, 0, 1]])]
-    mrcm(5, square(size), transformations)
+    mrcm(8, square(1), transformations)
     image.save("C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\images8\\star.png")
+
+
+def fern():
+    transformations = [np.matrix([[0.849, 0.037, 0.075],
+                                  [-0.037, 0.849, 0.183],
+                                  [0, 0, 1]]),
+                       np.matrix([[0.197, -0.226, 0.4],
+                                  [0.226, 0.197, 0.049],
+                                  [0, 0, 1]]),
+                       np.matrix([[-0.15, 0.283, 0.575],
+                                  [0.26, 0.237, 0.084],
+                                  [0, 0, 1]]),
+                       np.matrix([[0, 0, 0.5],
+                                  [0, 0.16, 0],
+                                  [0, 0, 1]])]
+    mrcm(9, square(1), transformations)
+    image.save("C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\images8\\fern.png")
+
+
+def orionStar(size):
+    line = Polygon([Point(size // 2, size), Point(size // 2, size // 2)])
+    transformations = [combine([scaling(0.5, 2)]),
+                       combine([rotation(90), translation(0, size // 2), scaling(0.5, 2)]),
+                       combine([rotation(-90), translation(0, -size // 2), scaling(0.5, 2)]),
+                       combine([rotation(180), translation(0, -size // 2), scaling(0.5, 2)])]
+    mrcm(8, line, transformations)
+    image.save("C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\images8\\orionStar.png")
+
+
+def fractal(size):
+    transformations = [combine([rotation(45), translation(size, size), scaling(0.5, 0.5)]),
+                       combine([rotation(-45), translation(size, size), scaling(0.5, 0.5)]),
+                       combine([rotation(135), translation(size, size), scaling(0.5, 0.5)]),
+                       combine([rotation(-135), translation(size, size), scaling(0.5, 0.5)])]
+    mrcm(8, square(size), transformations)
+    image.save("C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\images8\\fractal.png")
 
 
 # squares()
@@ -126,5 +164,8 @@ def star(size):
 # fan()
 
 # sierpinskyTriangle(500, 150)
-star(500)
+# star()
+# fern()
+# orionStar(50)
+fractal(200)
 image.show()

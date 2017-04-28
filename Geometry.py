@@ -14,6 +14,12 @@ class Point:
         yDifference = math.cos(angle) * step * direction
         return Point(self.x + xDifference, self.y + yDifference)
 
+    def applyTransformation(self, transformation):
+        result = np.dot(transformation, [self.x, self.y, 1])
+        self.x = result[0, 0]
+        self.y = result[0, 1]
+        return self
+
 
 class Line:
     def __init__(self, p1, p2, isPenDown=True):
