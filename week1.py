@@ -1,7 +1,6 @@
 from PIL import Image, ImageDraw
 import math
 import matplotlib.pyplot as plot
-from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 
 size = 255

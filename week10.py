@@ -1,6 +1,7 @@
 import random
 import week2
-import re
+import numpy as np
+
 
 def showDoor(choice):
     return {
@@ -11,7 +12,7 @@ def showDoor(choice):
 
 
 def applyStrategy(strategy, choice, shown):
-    third = [x for x in list(range(3)) if x != choice and x!= shown][0]
+    third = [x for x in list(range(3)) if x != choice and x != shown][0]
     return {
         'switch': third,
         'stay': choice,
@@ -32,20 +33,6 @@ def montyHallProblem(strategy, n=100000):
         wins / n * 100) + '% of games.')
 
 
-def analyzeNumbers():
-    set = ['1', '2', '3', '4', '5', '6']
-    variationsWithRepetition6 = week2.calculation(set, 6, week2.Type.variationWithRepetition)
-    variationsWithRepetition2 = week2.calculation(set, 2, week2.Type.variationWithRepetition)
-    for i in range(1, 8):
-        file = open('random/random' + str(i) + ".txt")
-        file = file.read().replace(" ", "") #now we have only numbers as one long string
-        length = len(file)
-        print('Sequence: ' + str(i) + ' of length ' + str(length))
-        countingNumbers(file)
-        overlappingVariations(file, variationsWithRepetition2, False)
-        overlappingVariations(file, variationsWithRepetition2, True, 200)
-        overlappingVariations(file, variationsWithRepetition6, True, 10)
-
 def countingNumbers(file):
     for i in range(1, 7):
         positions = [0]
@@ -54,10 +41,10 @@ def countingNumbers(file):
             if str(i) == file[j]:
                 positions.append(j)
         occurences = len(positions)
-        for j in range(occurences-1):
-            sum += positions[j+1] - positions[j]
+        for j in range(occurences - 1):
+            sum += positions[j + 1] - positions[j]
         print(str(i) + ' is in sequence ' + str(occurences))
-        print(str(i) + ' has average interval of occuring ' + str(sum/occurences))
+        print(str(i) + ' has average interval of occuring ' + str(sum / occurences))
         print(positions)
 
 
@@ -74,8 +61,88 @@ def overlappingVariations(file, variations, lookingForExisting, max=0):
                 print(variationString + ' was generated ' + str(numberOfVariations))
 
 
+def analyzeNumbers():
+    set = ['1', '2', '3', '4', '5', '6']
+    variationsWithRepetition6 = week2.calculation(set, 6, week2.Type.variationWithRepetition)
+    variationsWithRepetition2 = week2.calculation(set, 2, week2.Type.variationWithRepetition)
+    for i in range(1, 8):
+        file = open('random/random' + str(i) + ".txt")
+        file = file.read().replace(" ", "")  # now we have only numbers as one long string
+        length = len(file)
+        print('Sequence: ' + str(i) + ' of length ' + str(length))
+        countingNumbers(file)
+        overlappingVariations(file, variationsWithRepetition2, False)
+        overlappingVariations(file, variationsWithRepetition2, True, 200)
+        overlappingVariations(file, variationsWithRepetition6, True, 10)
 
 
-#montyHallProblem('switch')
+def allSixsThrown(x):
+    allSixs = False
+    for j in range(x):
+        throw = random.randint(1, 6)
+        if throw == 6:
+            allSixs = True
+        else:
+            return False
+    return allSixs
 
-analyzeNumbers()
+
+def bayes(n, x):
+    resultFromFormula = ((n - 1) / n) / 6 ** x / (1 / n + ((n - 1) / n) / 6 ** x)
+    print('From formula: ' + str(resultFromFormula * 100))
+    normalDices = [True for i in range(n)]
+    normalDices[random.randint(0, n - 1)] = False
+    allThrowsWithSix = 0
+    allThrowsWithSixWithNormalDice = 0
+    for i in range(n):
+        chosenDiceIsNormal = normalDices[random.randint(0, n - 1)]
+        if (not chosenDiceIsNormal) or allSixsThrown(x):
+            allThrowsWithSix += 1
+            if chosenDiceIsNormal:
+                allThrowsWithSixWithNormalDice += 1
+    resultFromSimulation = allThrowsWithSixWithNormalDice / allThrowsWithSix
+    print('From simulation: ' + str(resultFromSimulation * 100))
+
+
+def central(k, n):
+    dice1 = [(i + 1) / 21 for i in range(6)]
+    dice2 = dice1[::-1]
+    dices = [dice1, dice2]
+
+    averagesDice1 = []
+    averagesEachTimeRandomDice = []
+    averagesRandomDice = []
+
+    for i in range(k):
+        sumOfThrows = 0
+        for j in range(n):
+            sumOfThrows += 1 + np.random.choice(6, 1, dice1)[0]
+        averagesDice1.append(sumOfThrows / n)
+    #    for average in averagesDice1:
+    #        print(average)
+
+    for i in range(k):
+        sumOfThrows = 0
+        for j in range(n):
+            chosenDice = random.choice(dices)
+            sumOfThrows += 1 + np.random.choice(6, 1, chosenDice)[0]
+        averagesEachTimeRandomDice.append(sumOfThrows / n)
+    for average in averagesEachTimeRandomDice:
+        print(average)
+
+    for i in range(k):
+        sumOfThrows = 0
+        chosenDice = random.choice(dices)
+        for j in range(n):
+            sumOfThrows += 1 + np.random.choice(6, 1, chosenDice)[0]
+            averagesRandomDice.append(sumOfThrows / n)
+
+
+# for average in averagesRandomDice:
+#        print(average)
+
+
+# montyHallProblem('switch')
+# analyzeNumbers()
+# bayes(1000000, 7)
+central(1000, 100)
