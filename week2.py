@@ -143,8 +143,8 @@ def wallis():
         i += 2
     print(result*2)
 
-monteCarlo()
-leibniz()
-archimedes()
-wallis()
+#monteCarlo()
+#leibniz()
+#archimedes()
+#wallis()
 #image.show()
