@@ -1,6 +1,7 @@
 import random
 import week2
 import numpy as np
+import matplotlib.pyplot as plot
 
 
 def showDoor(choice):
@@ -104,42 +105,55 @@ def bayes(n, x):
     print('From simulation: ' + str(resultFromSimulation * 100))
 
 
-def central(k, n):
-    dice1 = [(i + 1) / 21 for i in range(6)]
-    dice2 = dice1[::-1]
-    dices = [dice1, dice2]
+dice1 = [(i + 1) / 21 for i in range(6)]
+dice2 = dice1[::-1]
+dices = [dice1, dice2]
 
-    averagesDice1 = []
-    averagesEachTimeRandomDice = []
-    averagesRandomDice = []
 
+def plot1(k, n):
+    averages = []
     for i in range(k):
         sumOfThrows = 0
         for j in range(n):
             sumOfThrows += 1 + np.random.choice(6, 1, dice1)[0]
-        averagesDice1.append(sumOfThrows / n)
-    #    for average in averagesDice1:
-    #        print(average)
+        averages.append(sumOfThrows / n)
+    plot.title('všech n hodů provádíme kostkou Ka')
+    plot.hist(averages)
+    plot.savefig('images10/plot1')
 
+
+def plot2(k, n):
+    averages = []
     for i in range(k):
         sumOfThrows = 0
         for j in range(n):
             chosenDice = random.choice(dices)
             sumOfThrows += 1 + np.random.choice(6, 1, chosenDice)[0]
-        averagesEachTimeRandomDice.append(sumOfThrows / n)
-    for average in averagesEachTimeRandomDice:
-        print(average)
+        averages.append(sumOfThrows / n)
+    plot.clf()
+    plot.title('pro každý hod náhodně vybereme jednu z kostek Ka, Kb')
+    plot.hist(averages)
+    plot.savefig('images10/plot2')
 
+
+def plot3(k, n):
+    averages = []
     for i in range(k):
         sumOfThrows = 0
         chosenDice = random.choice(dices)
         for j in range(n):
             sumOfThrows += 1 + np.random.choice(6, 1, chosenDice)[0]
-            averagesRandomDice.append(sumOfThrows / n)
+        averages.append(sumOfThrows / n)
+    plot.clf()
+    plot.title('náhodně vybereme jednu z kostek Ka, Kb a tou provedeme všech n hodů')
+    plot.hist(averages)
+    plot.savefig('images10/plot3')
 
 
-# for average in averagesRandomDice:
-#        print(average)
+def central(k, n):
+    plot1(k, n)
+    plot2(k, n)
+    plot3(k, n)
 
 
 # montyHallProblem('switch')
