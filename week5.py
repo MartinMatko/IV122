@@ -1,5 +1,7 @@
-from PIL import Image, ImageDraw
-from random import randint, triangular, uniform
+from random import randint
+
+from PIL import Image
+
 from Geometry import *
 
 size = 1000

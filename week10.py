@@ -1,7 +1,9 @@
 import random
-import week2
-import numpy as np
+
 import matplotlib.pyplot as plot
+import numpy as np
+
+import week2
 
 
 def showDoor(choice):

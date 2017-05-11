@@ -1,7 +1,8 @@
-from PIL import Image, ImageDraw
 import math
+
 import matplotlib.pyplot as plot
 import numpy as np
+from PIL import Image, ImageDraw
 
 size = 255
 image = Image.new("RGB", (size, size), color="white")

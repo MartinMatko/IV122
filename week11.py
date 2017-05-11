@@ -1,12 +1,7 @@
-import random
-from operator import itemgetter
-
-import numpy as np
-import matplotlib.pyplot as plot
 import math
-import matplotlib.cm as cm
 
-from Geometry import Point
+import matplotlib.pyplot as plot
+import numpy as np
 
 
 def loadData(filename):

@@ -1,7 +1,8 @@
-import math
-from PIL import ImageDraw
-import numpy as np
 import copy
+import math
+
+import numpy as np
+from PIL import ImageDraw
 
 
 class Point:

@@ -1,9 +1,10 @@
-from PIL import Image, ImageDraw
-import math
-import numpy as np
 import copy
+import math
 
-from Geometry import Polygon, Point, PolygonGroup, Line
+import numpy as np
+from PIL import Image, ImageDraw
+
+from Geometry import Polygon, Point, PolygonGroup
 
 size = 1000
 image = Image.new("RGB", (size, size), color="white")

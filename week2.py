@@ -1,8 +1,9 @@
-from enum import Enum
-from PIL import Image, ImageDraw
 import random
-import numpy as np
 import time
+from enum import Enum
+
+import numpy as np
+from PIL import Image, ImageDraw
 
 size = 255
 image = Image.new("RGB", (size, size), color="white")

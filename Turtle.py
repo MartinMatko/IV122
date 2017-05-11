@@ -1,10 +1,9 @@
-import sys
-from math import cos, sin, radians
+from math import radians
 
 from PIL import Image
-from PIL import ImageDraw
 
 from Geometry import *
+
 
 class Turtle:
     def __init__(self):

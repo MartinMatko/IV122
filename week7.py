@@ -1,7 +1,7 @@
 import colorsys
 
-from PIL import Image, ImageDraw
-import math
+from PIL import Image
+
 from Geometry import *
 
 size = 255

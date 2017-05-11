@@ -1,5 +1,5 @@
 from math import tan, sqrt, degrees
-from random import randint, uniform, random
+from random import randint, uniform
 
 from Turtle import *
 

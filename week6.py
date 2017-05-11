@@ -1,9 +1,7 @@
-from enum import Enum
-from PIL import Image, ImageDraw
 import random
-import numpy as np
-import math
-import time
+
+from PIL import Image
+
 from Geometry import *
 
 size = 255
