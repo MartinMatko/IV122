@@ -1,6 +1,12 @@
 import random
+from operator import itemgetter
+
 import numpy as np
 import matplotlib.pyplot as plot
+import math
+import matplotlib.cm as cm
+
+from Geometry import Point
 
 
 def loadData(filename):
@@ -45,9 +51,49 @@ def analyse(filename):
     plot.show()
 
 
-def kMeans(filename, k):
-    x, y = loadData(filename)
-    #TODO
+def getDistance(x1, y1, x2, y2):
+    return math.sqrt(((x1 - x2) ** 2 + (y1 - y2) ** 2))
 
-#analyse('faithful')
-kMeans('faithful', 2)
+
+def kMeans(filename, n):
+    x, y = loadData(filename)
+    means = {}
+    cm = plot.get_cmap('gist_rainbow')
+    minX, maxX, minY, maxY = min(x), max(x), min(y), max(y)
+    for i in range(n):
+        means[i] = {'x': np.random.randint(minX, maxX),
+                    'y': np.random.randint(minY, maxY),
+                    'pointsX': [],
+                    'pointsY': [],
+                    'color': cm(1. * i / n)}
+
+    for i in range(20):
+        for mean in means.values():
+            mean['pointsX'].clear()
+            mean['pointsY'].clear()
+
+        # assigning points to mean
+        for j in range(len(x)):
+            shortestDistance = max(maxX, maxY)
+            for k in range(len(means.values())):
+                centreX, centreY = means[k]['x'], means[k]['y']
+                distance = math.sqrt((x[j] - centreX) ** 2 + (y[j] - centreY) ** 2)
+                if distance < shortestDistance:
+                    shortestDistance = distance
+                    mean = means[k]
+            mean['pointsX'].append(x[j])
+            mean['pointsY'].append(y[j])
+
+        # finding new mean of cluster
+        for mean in means.values():
+            mean['x'] = sum(mean['pointsX']) / len(mean['pointsX'])
+            mean['y'] = sum(mean['pointsY']) / len(mean['pointsY'])
+
+    for mean in means.values():
+        plot.scatter(mean['pointsX'], mean['pointsY'], color=mean['color'])
+        plot.scatter(mean['x'], mean['y'], color=(0, 0, 0))
+    plot.show()
+
+
+# analyse('faithful')
+kMeans('faithful', 4)
