@@ -1,3 +1,5 @@
+import random
+
 from PIL import Image, ImageFont
 
 from Geometry import *
@@ -80,21 +82,43 @@ def drawMaze():
     image.show()
 
 
-def isPointInsideOfMaze(movedX, movedY, graphSize):
-    return 0 <= movedX < graphSize and 0 <= movedY < graphSize
-
-
-def lampsToGraph():
-    lines = open('lamps.txt').read().split('\n')
-    graph = {}
-    graphSize = len(lines)
-    lamps = []
+def generateMatrix(graphSize, difficulty):
     matrix = [[0 for x in range(graphSize)] for y in range(graphSize)]
+    lamps = []
     for i in range(graphSize):
-        rows = lines[i].split(' ')
         for j in range(graphSize):
-            matrix[i][j] = rows[j]
+            matrix[i][j] = 'f'
 
+    for i in range(difficulty):
+        x = random.randint(0, graphSize-1)
+        y = random.randint(0, graphSize-1)
+        matrix[x][y] = 'l'
+        lamps.append({'vertex': str(i) + ',' + str(j),
+                      'paths': {},
+                      'distances': {}})
+    addObstacles(matrix, lamps)
+    return matrix
+
+def addObstacles(matrix, lamps):
+    #7krat viac prekazok ako lamp mi prislo najoptialnejsie
+    graphSize = len(matrix)
+    for i in range(len(lamps) * 7):
+        x = random.randint(0, graphSize-1)
+        y = random.randint(0, graphSize-1)
+        matrix[x][y] = 'o'
+        graph, graphSize, lamps = matrixToGraph(matrix)
+        while (not findBestIntersection(lamps, graphSize) == ''):
+            x = random.randint(0, graphSize-1)
+            y = random.randint(0, graphSize-1)
+            matrix[x][y] = 'o'
+            graph, graphSize, lamps = matrixToGraph(matrix)
+
+
+
+def matrixToGraph(matrix):
+    graph = {}
+    lamps = []
+    graphSize = len(matrix)
     for i in range(graphSize):
         for j in range(graphSize):
             graph[str(i) + ',' + str(j)] = set()
@@ -109,7 +133,23 @@ def lampsToGraph():
                 if isPointInsideOfMaze(movedX, movedY, graphSize) and matrix[movedX][movedY] != 'o' and matrix[i][
                     j] != 'o':
                     graph[str(i) + ',' + str(j)].add(str(movedX) + ',' + str(movedY))
+    drawTiles(matrix)
+    drawBorders(graphSize)
     return graph, graphSize, lamps
+
+def isPointInsideOfMaze(movedX, movedY, graphSize):
+    return 0 <= movedX < graphSize and 0 <= movedY < graphSize
+
+
+def fileToMatrix():
+    lines = open('lamps.txt').read().split('\n')
+    graphSize = len(lines)
+    matrix = [[0 for x in range(graphSize)] for y in range(graphSize)]
+    for i in range(graphSize):
+        rows = lines[i].split(' ')
+        for j in range(graphSize):
+            matrix[i][j] = rows[j]
+    return matrix
 
 
 def dijsktra(graph, initial):
@@ -137,35 +177,36 @@ def dijsktra(graph, initial):
 
 
 def findBestIntersection(lamps, graphSize):
-    pathCostSums = {}
+    pathCostSumsToVertices = {}
+    numberOfLampsWithPathToVertices = {}
     for i in range(graphSize):
         for j in range(graphSize):
-            pathCostSums[str(i) + ',' + str(j)] = 0
+            pathCostSumsToVertices[str(i) + ',' + str(j)] = 0
+            numberOfLampsWithPathToVertices[str(i) + ',' + str(j)] = 0
     for lamp in lamps:
         for vertex in lamp['distances'].keys():
-            pathCostSums[vertex] += lamp['distances'][vertex]
+            pathCostSumsToVertices[vertex] += lamp['distances'][vertex]
+            numberOfLampsWithPathToVertices[vertex] += 1
     minPathCost = 10000
     bestIntersection = ''
-    for vertex in pathCostSums.keys():
-        if 0 < pathCostSums[vertex] < minPathCost:
-            minPathCost = pathCostSums[vertex]
+    for vertex in pathCostSumsToVertices.keys():
+        if 0 < pathCostSumsToVertices[vertex] < minPathCost and numberOfLampsWithPathToVertices[vertex] == len(lamps):
+            minPathCost = pathCostSumsToVertices[vertex]
             bestIntersection = vertex
     return bestIntersection
 
 
-def drawTiles():
-    lines = open('lamps.txt').read().split('\n')
-    graphSize = len(lines)
+def drawTiles(matrix):
+    graphSize = len(matrix)
     sizeOfTile = size // graphSize
     nextTileX = 0
     nextTileY = 0
     for i in range(graphSize):
-        objects = lines[i].split(' ')
         for j in range(graphSize):
             color = (255, 255, 255)
-            if objects[j] == 'o':
+            if matrix[i][j] == 'o':
                 color = (128, 128, 128)
-            if objects[j] == 'l':
+            if matrix[i][j] == 'l':
                 color = (255, 255, 0)
             draw.rectangle((nextTileX, nextTileY, nextTileX + sizeOfTile, nextTileY + sizeOfTile), fill=color)
             nextTileX += sizeOfTile
@@ -186,19 +227,24 @@ def getPathsFromDictionary(lamps, intersection):
     return paths
 
 
-def drawLamps():
-    graph, graphSize, lamps = lampsToGraph()
+def drawLamps(generateNewMaze=False, graphSize = 20, difficulty = 20):
+    if not generateNewMaze:
+        matrix = fileToMatrix()
+    else:
+        matrix = generateMatrix(graphSize, difficulty)
+    graph, graphSize, lamps = matrixToGraph(matrix)
     for lamp in lamps:
         lamp['distances'], lamp['paths'] = dijsktra(graph, lamp['vertex'])
     intersection = findBestIntersection(lamps, graphSize)
+    if (intersection == ''):
+        print("There is no way to connect all lamps")
+        return
     paths = getPathsFromDictionary(lamps, intersection)
-    drawTiles()
-    drawBorders(graphSize)
     for path in paths:
         drawPath(path, graphSize)
-    image.save('C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\images12\\lamps.png')
+    image.save('C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\images12\\lampsGenerated.png')
     image.show()
 
 
 #drawMaze()
-drawLamps()
+drawLamps(True)
