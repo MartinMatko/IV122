@@ -24,7 +24,7 @@ def scalar():
 def scalar1():
     for (x, y) in [(0, 0), (1, 0), (0, 1), (1, 1)]:
         z = 1
-        while z < size / 2:
+        while z < size // 2:
             z **= 100 / 99
             draw.line((z - 2 * x * z + x * size, size / 2, size / 2, size / 2 - z + 2 * y * z), fill=10)
 
@@ -39,7 +39,7 @@ def ulam(k, conditionMethod):
             if conditionMethod(number, k):
                 image.putpixel((x, y), (0, 0, 0))
             if i % 2 == 1:
-                x += 1;
+                x += 1
             else:
                 x -= 1
         for j in range(1, i):
@@ -52,7 +52,7 @@ def ulam(k, conditionMethod):
                 y += 1
 
 
-def isPrime(n, k):
+def isPrime(n):
     if n % 2 == 0 and n > 2:
         return False
     for i in range(3, int(math.sqrt(n)) + 1, 2):

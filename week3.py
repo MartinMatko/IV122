@@ -1,4 +1,4 @@
-from math import tan, sqrt, degrees
+from math import tan, sqrt, degrees, sin
 from random import randint, uniform
 
 from Turtle import *
@@ -67,7 +67,7 @@ def drawMeshedCircle(density=15, radius=200):
         verticalLine = Line(point1, point2)
         verticalLine.drawLine(image, 500)
     image.show()
-    image.save("C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\images3\\meshedCircle.png")
+    image.save("images3\\meshedCircle.png")
 
 
 def drawTriangles(density):

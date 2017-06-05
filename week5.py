@@ -42,7 +42,7 @@ def linesWithIntersects(length, count):
     lines = generateLines(length, count)
     drawLines(lines)
     draw_intersects(lines)
-    image.save("C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\images5\\linesWithIntersects.png")
+    image.save("images5\\linesWithIntersects.png")
 
 
 def generateAndDrawPoints(numberOfPoints):
@@ -75,7 +75,7 @@ def triangulation(density, sort):
         if not intersected:
             chosen.append(line)
     drawLines(chosen)
-    image.save("C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\images5\\triangulationSortedUniform.png")
+    image.save("images5\\triangulationSortedUniform.png")
 
 
 def findLeftMostPoint(points):
@@ -87,28 +87,30 @@ def findLeftMostPoint(points):
 
 
 def isLeftOfLine(point, line):
-    return ((line.p2.x - line.p1.x) * (point.y - line.p1.y) - (line.p2.y - line.p1.y) * (point.x - line.p1.x)) > 0;
+    return ((line.p2.x - line.p1.x) * (point.y - line.p1.y) - (line.p2.y - line.p1.y) * (point.x - line.p1.x)) > 0
 
 
 def convexHull(points):
     pointOnHull = findLeftMostPoint(points)
     pointsOnHull = []
+    endPoint = points[0]
     while len(pointsOnHull) == 0 or pointsOnHull[0] != endPoint:  # we finish when we close convex hull
         pointsOnHull.append(pointOnHull)
-        endPoint = points[0]
         for point in points:
             if (endPoint == pointOnHull) or (
                     isLeftOfLine(point, Line(pointOnHull, endPoint))):  # we search for leftMost point
                 endPoint = point
         draw.line((pointOnHull.x, pointOnHull.y, endPoint.x, endPoint.y), fill=10)
         pointOnHull = endPoint
-    return [x for x in points if x not in pointsOnHull] # returns points which are not in convex hull
+    return [x for x in points if x not in pointsOnHull]  # returns points which are not in convex hull
+
 
 def layeredConvexHull(density):
     points = generateAndDrawPoints(density)
     while len(points) > 1:
         points = convexHull(points)
-    image.save("C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\images5\\convexHull.png")
+    image.save("images5\\convexHull.png")
+
 
 # linesWithIntersects(200, 50)
 # triangulationBasic(30)

@@ -24,6 +24,7 @@ class Point:
     def getLength(self):
         return math.sqrt(self.x ** 2 + self.y ** 2)
 
+
 class Line:
     def __init__(self, p1, p2, isPenDown=True):
         self.p1 = p1

@@ -26,7 +26,9 @@ def mazeToGraph():
     return graph, graphSize
 
 
-def solve(graph, start, end, path=[]):
+def solve(graph, start, end, path=None):
+    if path is None:
+        path = []
     path = path + [start]
     if start == end:
         return [path]
@@ -78,7 +80,7 @@ def drawMaze():
     drawBorders(graphSize)
     drawNumbers()
     drawPath(min(paths, key=len), graphSize)
-    image.save('C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\images12\\numberMaze.png')
+    image.save('images12\\numberMaze.png')
     image.show()
 
 
@@ -90,8 +92,8 @@ def generateMatrix(graphSize, difficulty):
             matrix[i][j] = 'f'
 
     for i in range(difficulty):
-        x = random.randint(0, graphSize-1)
-        y = random.randint(0, graphSize-1)
+        x = random.randint(0, graphSize - 1)
+        y = random.randint(0, graphSize - 1)
         matrix[x][y] = 'l'
         lamps.append({'vertex': str(i) + ',' + str(j),
                       'paths': {},
@@ -99,20 +101,20 @@ def generateMatrix(graphSize, difficulty):
     addObstacles(matrix, lamps)
     return matrix
 
+
 def addObstacles(matrix, lamps):
-    #7krat viac prekazok ako lamp mi prislo najoptialnejsie
+    # 7krat viac prekazok ako lamp mi prislo najoptimalnejsie
     graphSize = len(matrix)
     for i in range(len(lamps) * 7):
-        x = random.randint(0, graphSize-1)
-        y = random.randint(0, graphSize-1)
+        x = random.randint(0, graphSize - 1)
+        y = random.randint(0, graphSize - 1)
         matrix[x][y] = 'o'
         graph, graphSize, lamps = matrixToGraph(matrix)
         while (not findBestIntersection(lamps, graphSize) == ''):
-            x = random.randint(0, graphSize-1)
-            y = random.randint(0, graphSize-1)
+            x = random.randint(0, graphSize - 1)
+            y = random.randint(0, graphSize - 1)
             matrix[x][y] = 'o'
             graph, graphSize, lamps = matrixToGraph(matrix)
-
 
 
 def matrixToGraph(matrix):
@@ -136,6 +138,7 @@ def matrixToGraph(matrix):
     drawTiles(matrix)
     drawBorders(graphSize)
     return graph, graphSize, lamps
+
 
 def isPointInsideOfMaze(movedX, movedY, graphSize):
     return 0 <= movedX < graphSize and 0 <= movedY < graphSize
@@ -227,7 +230,7 @@ def getPathsFromDictionary(lamps, intersection):
     return paths
 
 
-def drawLamps(generateNewMaze=False, graphSize = 20, difficulty = 20):
+def drawLamps(generateNewMaze=False, graphSize=20, difficulty=20):
     if not generateNewMaze:
         matrix = fileToMatrix()
     else:
@@ -242,9 +245,9 @@ def drawLamps(generateNewMaze=False, graphSize = 20, difficulty = 20):
     paths = getPathsFromDictionary(lamps, intersection)
     for path in paths:
         drawPath(path, graphSize)
-    image.save('C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\images12\\lampsGenerated.png')
+    image.save('images12\\lampsGenerated.png')
     image.show()
 
 
-#drawMaze()
+# drawMaze()
 drawLamps(True)

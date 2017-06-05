@@ -58,21 +58,21 @@ def squares():
     polygon = square(20)
     transformations = combine([rotation(20), scaling(1.1, 1.1), translation(5, 10)])
     polygon.repeatTransformation(10, transformations, image, size)
-    image.save("C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\images8\\squares.png")
+    image.save("images8\\squares.png")
 
 
 def tail():
     polygon = square(50)
     transformations = combine([shear(1.3), rotation(10), scaling(0.9, 0.9), translation(-50, 50)])
     polygon.repeatTransformation(25, transformations, image, size)
-    image.save("C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\images8\\tail.png")
+    image.save("images8\\tail.png")
 
 
 def fan():
     polygon = square(200)
     transformations = combine(rotation(10), scaling(1.1, 0.8))
     polygon.repeatTransformation(50, transformations, image, size)
-    image.save("C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\images8\\fan.png")
+    image.save("images8\\fan.png")
 
 
 def mergeGroups(groups):
@@ -104,7 +104,7 @@ def sierpinskyTriangle(size, angle):
                        combine([rotation(angle), translation(0, size // 2), scaling(0.5, 0.5)]),
                        combine([rotation(-angle), translation(0, size // 2), scaling(0.5, 0.5)])]
     mrcm(7, square(size), transformations)
-    image.save("C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\images8\\sierpinskyTriangle" + str(angle) + ".png")
+    image.save("images8\\sierpinskyTriangle" + str(angle) + ".png")
 
 
 def star():
@@ -121,7 +121,7 @@ def star():
                                   [0.642, 0.370, -0.0061],
                                   [0, 0, 1]])]
     mrcm(8, square(1), transformations)
-    image.save("C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\images8\\star.png")
+    image.save("images8\\star.png")
 
 
 def fern():
@@ -138,7 +138,7 @@ def fern():
                                   [0, 0.16, 0],
                                   [0, 0, 1]])]
     mrcm(9, square(1), transformations)
-    image.save("C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\images8\\fern.png")
+    image.save("images8\\fern.png")
 
 
 def orionStar(size):
@@ -148,7 +148,7 @@ def orionStar(size):
                        combine([rotation(-90), translation(0, -size // 2), scaling(0.5, 2)]),
                        combine([rotation(180), translation(0, -size // 2), scaling(0.5, 2)])]
     mrcm(8, line, transformations)
-    image.save("C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\images8\\orionStar.png")
+    image.save("images8\\orionStar.png")
 
 
 def fractal(size):
@@ -157,7 +157,7 @@ def fractal(size):
                        combine([rotation(135), translation(size, size), scaling(0.5, 0.5)]),
                        combine([rotation(-135), translation(size, size), scaling(0.5, 0.5)])]
     mrcm(8, square(size), transformations)
-    image.save("C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\images8\\fractal.png")
+    image.save("images8\\fractal.png")
 
 
 # squares()

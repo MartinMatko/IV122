@@ -7,19 +7,20 @@ image = Image.new("RGB", (size, size), color="white")
 draw = ImageDraw.Draw(image)
 middle = size // 2
 
+
 def spiral():
     t = 0
     r = 1
     while r < middle:
         x = int(middle + r * math.cos(t % (2 * math.pi)))
         y = int(middle + r * math.sin(t % (2 * math.pi)))
-        if r < middle / 2:
+        if r < middle // 2:
             image.putpixel((x, y), (int(r) * 2, int(r) * 4, 255 - int(r) * 2))
         else:
             image.putpixel((x, y), (int(r) * 2, 255 + int(middle / 2) - int(r) * 2, 255 - int(r) * 2))
         t += 0.001
         r += 0.002
-    image.save("C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\images4\\spiral.png")
+    image.save("images4\\spiral.png")
 
 
 def circleFull(r):
@@ -27,7 +28,7 @@ def circleFull(r):
         for y in range(size):
             if (x - size / 2) ** 2 + (y - size / 2) ** 2 < r ** 2:
                 image.putpixel((x, y), (255 % abs(x), 255 % abs(x + y), 255 % abs(y)))
-    image.save("C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\images4\\circle_full.png")
+    image.save("images4\\circle_full.png")
 
 
 def circleWithWidth(r):
@@ -37,14 +38,14 @@ def circleWithWidth(r):
             if (((x - size / 2) ** 2 + (y - size / 2) ** 2) / (r - epsilon) ** 2) > 1 > (
                         ((x - size / 2) ** 2 + (y - size / 2) ** 2) / (r + epsilon) ** 2):
                 image.putpixel((x, y), (x, x + y, y))
-    image.save("C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\images4\\circle_with_width.png")
+    image.save("images4\\circle_with_width.png")
 
 
 def triangle(a):
     for x in range(size):
         for y in range(size):
-            cartesianx = x - middle;
-            cartesiany = -y + middle + a // 2;
+            cartesianx = x - middle
+            cartesiany = -y + middle + a // 2
 
             # y > 0 and y < -sqrt(3)*x + (sqrt(3)/2)*10 and y < sqrt(3)*x + (sqrt(3)/2)*10
             if 0 < cartesiany < -math.sqrt(3) * cartesianx + a * math.sqrt(3) / 2 and cartesiany < math.sqrt(
@@ -53,7 +54,7 @@ def triangle(a):
                 g = 255 // a * (a - y)
                 b = abs(255 - r - g)
                 image.putpixel((x, y), (r, g, b))
-    image.save("C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\images4\\triangle.png")
+    image.save("images4\\triangle.png")
 
 
 def ellipse(a, b, angle):
@@ -66,7 +67,7 @@ def ellipse(a, b, angle):
             if x_eq + y_eq < 1:
                 color = int(abs(x_eq + y_eq) * 255)
                 image.putpixel((x, y), (color, color, color))
-    image.save("C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\images4\\elipse.png")
+    image.save("images4\\elipse.png")
 
 
 def polygon(points):
@@ -88,7 +89,7 @@ def polygon(points):
                 image.putpixel((x, y), (0, 0, 0))
     im = image.rotate(180)
     im.show()
-    im.save("C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\images4\\polygon.png")
+    im.save("images4\\polygon.png")
 
 
 def circleIlusion():
@@ -96,15 +97,15 @@ def circleIlusion():
         for y in range(size):
             for z in range(1, size, int(size / 30)):
                 epsilon = 0.5
-                if (((x - size / 2) ** 2 + (y - size / 2) ** 2) / (z - epsilon) ** 2) > 1 \
-                        and (((x - size / 2) ** 2 + (y - size / 2) ** 2) / (z + epsilon) ** 2) < 1:
+                if (((x - size / 2) ** 2 + (y - size / 2) ** 2) / (z - epsilon) ** 2) > 1 > (
+                            ((x - size / 2) ** 2 + (y - size / 2) ** 2) / (z + epsilon) ** 2):
                     image.putpixel((x, y), (0, 0, 0))
     margin = 20
     draw.line((middle, margin, size - margin, middle), fill=(0, 0, 0), width=3)
     draw.line((size - margin, middle, middle, size - margin), fill=(0, 0, 0), width=3)
     draw.line((middle, size - margin, margin, middle), fill=(0, 0, 0), width=3)
     draw.line((margin, middle, middle, margin), fill=(0, 0, 0), width=3)
-    image.save("C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\images4\\circle_ilusion.png")
+    image.save("images4\\circle_ilusion.png")
 
 
 def chessboard(circles, squares):
@@ -126,7 +127,7 @@ def chessboard(circles, squares):
                 image.putpixel((x, y), col)
             else:
                 image.putpixel((x, y), opposite)
-    image.save("C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\images4\\chessboard.png")
+    image.save("images4\\chessboard.png")
 
 
 def lines():
@@ -136,11 +137,11 @@ def lines():
     rows = 10
     size_of_square = 22
     for line in range(rows):
-        x = (line % 2) * size_of_square // 2;
+        x = (line % 2) * size_of_square // 2
         drawRow(x, y, rows // 2, size_of_square, im)
         y = y + size_of_square + 2
     im.show()
-    im.save("C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\images4\\lines.png")
+    im.save("images4\\lines.png")
 
 
 def drawRow(x, y, pairs, size_of_square, image):

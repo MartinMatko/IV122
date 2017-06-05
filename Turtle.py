@@ -44,9 +44,10 @@ class Turtle:
         draw = ImageDraw.Draw(image)
         for line in self.path:
             if line.isPenDown:
-                draw.line((line.p1.x + size//2, size//2 - line.p1.y, line.p2.x + size//2, size//2 - line.p2.y), color, width)
+                draw.line((line.p1.x + size // 2, size // 2 - line.p1.y, line.p2.x + size // 2, size // 2 - line.p2.y),
+                          color, width)
         image.show()
-        image.save("C:\\Users\\Martin\\Dropbox\\Skola\\IV122\\" + nameOfFile + ".png")
+        image.save(nameOfFile + ".png")
 
     def push(self):
         self.stack.append((self.position, self.angle, self.pendown))
