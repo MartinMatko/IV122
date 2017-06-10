@@ -9,12 +9,12 @@ class Lsystem:
         self.turtle = Turtle()
 
     def draw(self, depth, fileName):
-        expanded = self.variable
+        expandedVariable = self.variable
         for i in range(depth):
             for rule in self.rules:
-                expanded = expanded.replace(rule, self.rules[rule])
+                expandedVariable = expandedVariable.replace(rule, self.rules[rule])
                 
-        for i in expanded:
-            if i in self.axioms:
-                exec("self.turtle." + self.axioms[i])
+        for axiom in expandedVariable:
+            if axiom in self.axioms:
+                exec("self.turtle." + self.axioms[axiom])
         self.turtle.draw(fileName)

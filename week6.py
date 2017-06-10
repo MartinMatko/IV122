@@ -51,7 +51,7 @@ def feigenbaum(x0, zoom=((2.4, 4), (0, 1))):
         for x in calculate(x0, r):
             j = x / (zoomX / size)
             image.putpixel((int(i), int(j)), (0, 0, 0))
-    image.save("images6\\feigenbaum" + str(zoom) + ".png")
+    image.save("images6\\feigenbaum.png")
 
 
 def calculate(x, r):
